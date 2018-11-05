@@ -10,8 +10,8 @@ def training_bm25_model(data_set):
         for seg in seg_list:
             tmp_list.append(seg)
         sentence_tmp_list.append(tmp_list)
-    bm25Model = bm25.BM25(sentence_tmp_list)
-    return bm25Model
+    model = bm25.BM25(sentence_tmp_list)
+    return model
 
 
 def get_average_idf_by_model(bm25_model):
@@ -20,8 +20,9 @@ def get_average_idf_by_model(bm25_model):
 
 
 def query_by_model(bm25_model, average_idf, query_string):
-    query = []
-    for word in query_string.strip().split():
+    query = list()
+    seg_list = jieba.cut(query_string)
+    for word in seg_list:
         query.append(word)
     scores = bm25_model.get_scores(query, average_idf)
     return scores
